@@ -28,12 +28,13 @@ module.exports = {
         }
 
     },
+
     buildRequestHassUrl: function (config) {
         var entities = "";
         config.charts.forEach(element => {
             entities = entities + (entities == "" ? element.entity : "," + element.entity);
         });
-        
+
         url = '/api/history/period/' + config.start + "?minimal_response=true&filter_entity_id=" + entities;
 
         if (config.end) {
@@ -67,7 +68,7 @@ module.exports = {
         });
         hassio.get(self.buildRequestHassUrl(config))
             .then(function (response) {
-                formattedData = [];
+                var formattedData = [];
                 
                 config.charts.forEach((chart, i) => {
                     // Look for corresponding dataset in response
@@ -86,8 +87,12 @@ module.exports = {
                     });
                 });
 
-                console.log("Formatted data");
-                console.log(formattedData[0]);
+                var payload = {
+                    identifier: config.identifier,
+                    formattedData: formattedData
+                }
+
+                self.sendSocketNotification('HASS_GRAPH_DATA_RESULT', payload);
             })
             .catch(function (error) {
                 // handle error
@@ -99,7 +104,7 @@ module.exports = {
     },
 
     socketNotificationReceived: function (notification, payload) {
-        if (notification === 'GET_HASS_GRAPH_DATA') {
+        if (notification === 'HASS_GRAPH_DATA_RESULT') {
             this.getData(payload);
         }
     },
