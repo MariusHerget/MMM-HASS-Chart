@@ -28,6 +28,6 @@
     "chart.js": "latest",
     "chartjs-plugin-zoom": "latest",
     "underscore": "latest",
-    "https": "latest"
+    "axios": "latest"
   }
 }
