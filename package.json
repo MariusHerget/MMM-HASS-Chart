@@ -1,0 +1,33 @@
+{
+  "name": "MMM-HASS-Chart",
+  "version": "0.0.1",
+  "description": "This module for the Magic Mirror 2 for rendering graphs from Home Assistant sensors.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MariusHerget/MMM-HASS-Chart"
+  },
+  "keywords": [
+    "magic mirror",
+    "smart mirror",
+    "module",
+    "graph",
+    "HASS",
+    "hassio",
+    "Home Assistant",
+    "Home",
+    "Assistant"
+  ],
+  "author": "Marius Herget",
+  "contributors": "git+https://github.com/MariusHerget/MMM-HASS-Chart/graphs/contributors",
+  "license": "MIT",
+  "bugs": {
+    "url": "git+https://github.com/MariusHerget/MMM-HASS-Chart/issues"
+  },
+  "homepage": "git+https://github.com/MariusHerget/MMM-HASS-Chart#readme",
+  "dependencies": {
+    "chart.js": "latest",
+    "chartjs-plugin-zoom": "latest",
+    "underscore": "latest",
+    "https": "latest"
+  }
+}
