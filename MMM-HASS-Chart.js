@@ -161,6 +161,20 @@ Module.register("MMM-HASS-Chart", {
             // Checks if the data is to this instanse of the graph module.
             if (this.identifier === payload.identifier) {
                 console.log("HASS_GRAPH_DATA_RESULT", payload);
+
+                this.chartData = {
+                    datasets=[]
+                };
+
+                payload.formattedData.forEach(element => {
+                    var cleanupChartData = element.chart;
+                    cleanupChartData.delete("entity");
+                    cleanupChartData.data = element.data;
+                    this.chartData.datasets.push(cleanupChartData);
+
+                    console.log("cleanupChartData", cleanupChartData);
+                });
+
                 this.updateDom(self.config.fadeSpeed);
             }
         }
@@ -185,10 +199,15 @@ Module.register("MMM-HASS-Chart", {
             // Adding the labels to the chart.
             // this.myChart.data.labels = this.chartData.labels;
             // // Adding the data to the chart.
-            // for (var i = 0; i < this.myChart.data.datasets.length && i < this.chartData.datasets.length; i++) {
-            //     this.myChart.data.datasets[i].data = this.chartData.datasets[i].data;
-            // }
-            // Updating the chart.
+            this.myChart.data.datasets = this.chartData.datasets;
+            // this.chartData.forEach(dataset => {
+            //     this.myChart.data.push(
+            //         {
+            //             label: "test a",
+            //             borderColor: dataset.chart
+            //             data: dataset.data
+            //         });
+            // });
             this.myChart.update();
         }
     },
@@ -233,7 +252,7 @@ Module.register("MMM-HASS-Chart", {
                 yAxes: []
             }
         };
-        
+
         // // Setting the time scale.
         // if (this.config.xaxisTimeUnit == "millisecond") {
         //     options.scales.xAxes[0].time.displayFormats.millisecond = this.config.xaxisTimeFormatLabels
@@ -259,7 +278,6 @@ Module.register("MMM-HASS-Chart", {
         this.myChart = new Chart(this.ctx, {
             type: this.config.graphStyle,
             data: {
-                labels: [],
                 datasets: [
                     {
                         label: "test a",
