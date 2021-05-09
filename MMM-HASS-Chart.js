@@ -246,14 +246,13 @@ Module.register("MMM-HASS-Chart", {
             },
             scales: {
                 xAxes: [{
-                    ticks: {
+                    scaleLabel: {
                         display: false
+                    },
+                    ticks: {
+                        display: false // it should work
                     }
-                }, {
-                        ticks: {
-                            display: false
-                        }
-                    }]
+                }]
             }
         };
         // Start of the Scales.
