@@ -207,21 +207,33 @@ Module.register("MMM-HASS-Chart", {
         // Setting the defaults.
 
         var options = {
-            type: 'line',
             responsive: true,
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: {
-                        position: 'top',
-                    },
-                    title: {
-                        display: true,
-                        text: 'Chart.js Line Chart'
-                    }
+            maintainAspectRatio: this.config.maintainAspectRatio,
+            legend: {
+                display: this.config.showGraphLabels,
+                position: this.config.showGraphLabelsPosition,
+                labels: {
+                    boxWidth: this.config.boxWidth,
+                    fontColor: this.config.boxFontColor
                 }
             },
+            pan: {
+                enabled: true,
+                mode: 'xy'
+            },
+            zoom: {
+                enabled: true,
+                mode: 'xy',
+            },
         };
+        // Start of the Scales.
+        var optionScales = {
+            scales: {
+                xAxes: [],
+                yAxes: []
+            }
+        };
+        
         // // Setting the time scale.
         // if (this.config.xaxisTimeUnit == "millisecond") {
         //     options.scales.xAxes[0].time.displayFormats.millisecond = this.config.xaxisTimeFormatLabels
