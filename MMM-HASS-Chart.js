@@ -241,10 +241,10 @@ Module.register("MMM-HASS-Chart", {
 
     // // Override dom generator.
     getDom: function () {
-        console.log("!! UpdateDom !!")
+        console.log("!! UpdateDom !!", this.wrapper, this.myChart)
 
         // Setting the defaults.
-        if (this.wrapper == 'undefined' || this.myChart == 'undefined') {
+        if (!this.wrapper || !this.myChart) {
             console.log("!! Update Wrapper !!")
             var wrapper = document.createElement("div");
             // Adding personal name class (fos use in CSS).
