@@ -129,7 +129,7 @@ Module.register("MMM-HASS-Chart", {
                                     // No new data - Do not update!
                                 } else {
                                     // Some value changed
-                                    if (ds.data.length == payload.formattedData.data[i].length) {
+                                    if (ds.data.length == pds.data[i].length) {
                                         var reloadTable = false;
                                         // Some y value changed
                                         // update x by x
