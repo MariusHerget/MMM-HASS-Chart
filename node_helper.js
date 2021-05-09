@@ -1,5 +1,5 @@
 // TODO add back in after testing
-var NodeHelper = require('node_helper'); 
+// var NodeHelper = require('node_helper'); 
 const axios = require('axios').default;
 const _ = require("lodash");
 const moment = require("moment");
@@ -43,8 +43,8 @@ const aggregates ={
     }
 };
 
-module.exports = NodeHelper.create({
-// module.exports = ({
+// module.exports = NodeHelper.create({
+module.exports = ({
     start: function () {
         console.log('MMM-Chart-Hass helper started...');
     },
@@ -116,6 +116,7 @@ module.exports = NodeHelper.create({
             graphData.push({ x: key, y: aggregates[config.aggregateFunc](data) });
         }
 
+        console.log(graphData)
         return graphData;
     },
 
@@ -152,7 +153,7 @@ module.exports = NodeHelper.create({
                     formattedData: formattedData
                 }
 
-                self.sendSocketNotification('HASS_GRAPH_DATA_RESULT', payload);
+                // self.sendSocketNotification('HASS_GRAPH_DATA_RESULT', payload);
             })
             .catch(function (error) {
                 // handle error

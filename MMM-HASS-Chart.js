@@ -30,92 +30,23 @@ Module.register("MMM-HASS-Chart", {
 		// ------------------------------------------------
         // Chart settings
 		// ------------------------------------------------
-        // Font size in px.
-        defaultFontSize: 12,
-        // Default MM font.
-        defaultFontFamily: "Roboto, sans-serif",
-        // Default color of the text.
-        defaultFontColor: "#666666",
-        // Graph ID (name)
-        name: "my-chart",
 
-        // Maintain aspect ratio.
-        maintainAspectRatio: true,
         // Animation speed.
         fadeSpeed: 1000,
-
-        // Type of graph.
-        // For mor information checkout: http://www.chartjs.org/docs/
-        // Warning, I have only really tested with bar and line graphs!
-        graphStyle: "line",
-		//graphStyle: "bar",
-		//graphStyle: "radar",
-		//graphStyle: "polarArea",
-        // X Axis time unit the graphs should be ploted in.
-        //xaxisTimeUnit: "millisecond",
-        //xaxisTimeUnit: "second",
-        //xaxisTimeUnit: "minute",
-        // xaxisTimeUnit: "hour",
-        xaxisTimeUnit: "day",
-        //xaxisTimeUnit: "week",
-        //xaxisTimeUnit: "month",
-        //xaxisTimeUnit: "quarter",
-        //xaxisTimeUnit: "year",
-
-        // Format for the unit above.
-        // For more options checkout: http://momentjs.com/docs/#/displaying/format/
-        // Example for second above.
-        //xaxisTimeFormatLabels: "ss",
-        // Example for minute above.
-        //xaxisTimeFormatLabels: "mm",
-        // Example for hour above.
-        // xaxisTimeFormatLabels: "H",
-        // Example for day above.
-        xaxisTimeFormatLabels: "DD-MM",
-        // Example for week above.
-        //xaxisTimeFormatLabels: "WW",
-        // Example for month above.
-        //xaxisTimeFormatLabels: "MM",
-
-        // Available: "category", "linear", "logarithmic", "time", "radialLinear" (you have to use one that works with your data).
-        // For more options checkout: http://www.chartjs.org/docs/#scales
-        xaxisType: "time",
-
-        // Display X-Axis ticks.
-        xaxisLabelTicks: true,
-
-        // Position of the horizontal scale labels (top, left, bottom and right).
-        xaxisLabelsPosition: "bottom",
-
-        // Add to the graph continuously.
-        additiveGraph: false,
-
-        // Max number of graph data points.
-        graphPoints: 10000,
-
-        // Show information lables.
-        showGraphLabels: true,
-        // Position of information lables (top, left, bottom and right).
-        showGraphLabelsPosition: "top",
-        // Box before text.  R    G    B   Weight
-        boxFontColor: "rgba(153, 153, 153, 0.6)",
-        // Width of the box (before the label).
-        boxWidth: 2,
-
-        // Axis color.     R    G    B   Weight
-        xaxisColor: "rgba(255, 255, 255, 0.1)",
-
-        // Default line bezier curve tension (recommended 0 - 0.4). Set to 0 for no bezier curves.
-        lineTension: 0.2,
-
-        // Tooltips enebeld/disabeld (displays if hoovering over tha graph points). 
-        tooltipEnabeld: true,
-        // Tooltip background         R  G  B  Weight
-        tooltipBackgroundColor: "rgba(0, 0, 0, 0.8)",
-        // Tooltip text colors.      R    G    B   Weight
-        tooltipBodyFontColor: "rgba(255, 255, 255, 1)",
-        tooltipTitleFontColor: "rgba(255, 255, 255, 1)",
-        tooltipDisplayColorsBoxes: true,
+        
+        chartType: "line",
+        options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            legend: {
+                display: true,
+                position: "top",
+                labels: {
+                    boxWidth: 2,
+                    fontColor: "rgba(153, 153, 153, 0.6)"
+                }
+            },
+        }
 
     },
     
@@ -226,75 +157,14 @@ Module.register("MMM-HASS-Chart", {
         wrapper.appendChild(this.ctx);
 
         // Setting the defaults.
-
-        var options = {
-            responsive: true,
-            maintainAspectRatio: this.config.maintainAspectRatio,
-            legend: {
-                display: this.config.showGraphLabels,
-                position: this.config.showGraphLabelsPosition,
-                labels: {
-                    boxWidth: this.config.boxWidth,
-                    fontColor: this.config.boxFontColor
-                }
-            },
-            pan: {
-                enabled: true,
-                mode: 'xy'
-            },
-            zoom: {
-                enabled: true,
-                mode: 'xy',
-            },
-            scales: {
-            }
-        };
-        // Start of the Scales.
-        var optionScales = {
-            scales: {
-                xAxes: [],
-                yAxes: []
-            }
-        };
-
-        // // Setting the time scale.
-        // if (this.config.xaxisTimeUnit == "millisecond") {
-        //     options.scales.xAxes[0].time.displayFormats.millisecond = this.config.xaxisTimeFormatLabels
-        // } else if (this.config.xaxisTimeUnit == "second") {
-        //     options.scales.xAxes[0].time.displayFormats.second = this.config.xaxisTimeFormatLabels
-        // } else if (this.config.xaxisTimeUnit == "minute") {
-        //     options.scales.xAxes[0].time.displayFormats.minute = this.config.xaxisTimeFormatLabels
-        // } else if (this.config.xaxisTimeUnit == "hour") {
-        //     options.scales.xAxes[0].time.displayFormats.hour = this.config.xaxisTimeFormatLabels
-        // } else if (this.config.xaxisTimeUnit == "day") {
-        //     options.scales.xAxes[0].time.displayFormats.day = this.config.xaxisTimeFormatLabels
-        // } else if (this.config.xaxisTimeUnit == "week") {
-        //     options.scales.xAxes[0].time.displayFormats.week = this.config.xaxisTimeFormatLabels
-        // } else if (this.config.xaxisTimeUnit == "month") {
-        //     options.scales.xAxes[0].time.displayFormats.month = this.config.xaxisTimeFormatLabels
-        // } else if (this.config.xaxisTimeUnit == "quarter") {
-        //     options.scales.xAxes[0].time.displayFormats.quarter = this.config.xaxisTimeFormatLabels
-        // } else if (this.config.xaxisTimeUnit == "year") {
-        //     options.scales.xAxes[0].time.displayFormats.year = this.config.xaxisTimeFormatLabels
-        // }
-
-        // Creating the actual graph.
         this.myChart = new Chart(this.ctx, {
-            type: this.config.graphStyle,
+            type: this.config.chartType,
             data: {
-                datasets: [
-                    {
-                        label: "test a",
-                        data: [{ x: 0, y: 1 }, { x: 1, y: 2 }, { x: 2, y: 5 }],
-                        borderColor: "rgba(255, 0, 0, 1)",
-                    }
-                ],
+                datasets: [],
             },
-            options: options
+            options: this.config.chartOptions
         });
-        // Chart.defaults.global.defaultFontSize = this.config.defaultFontSize;
-        // Chart.defaults.global.defaultFontFamily = this.config.defaultFontFamily;
-        // Chart.defaults.global.defaultFontColor = this.config.defaultFontColor;
+
         this.updateChartData();
         return wrapper;
     }
