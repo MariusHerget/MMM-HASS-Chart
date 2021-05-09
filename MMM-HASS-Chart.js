@@ -141,6 +141,7 @@ Module.register("MMM-HASS-Chart", {
 
     // Starting up.
     start: function () {
+        Log.info('Starting module: ' + this.name);
         this.scheduleUpdate();
         this.chartData = { labels: [], datasets: [] }
         this.config.identifier = this.identifier;
