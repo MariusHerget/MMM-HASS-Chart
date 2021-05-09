@@ -134,9 +134,7 @@ module.exports = NodeHelper.create({
     },
 
     setColorOpacity: function(color, opacity) {
-        return color.map(function (a) {
-            return a.replace(/rgba?(\(\s*\d+\s*,\s*\d+\s*,\s*\d+)(?:\s*,.+?)?\)/, 'rgba$1,'+opacity+')');
-        });
+        color.replace(/rgba?(\(\s*\d+\s*,\s*\d+\s*,\s*\d+)(?:\s*,.+?)?\)/, 'rgba$1,'+opacity+')');
     },
 
     getData: function (config) {
