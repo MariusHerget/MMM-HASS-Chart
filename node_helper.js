@@ -100,7 +100,7 @@ module.exports = NodeHelper.create({
         return url;
     },
 
-    formatHassioDataSetIntoGraphData: function(config, dataset) {
+    formatHassioDataSetIntoGraphData: function (config, dataset, aggregateFuncTMP = "mean") {
         var filteredDataset = [];
         dataset.forEach(element => {
             // Use only float values (or filter out 'unknown' / 'unavaiable' / etc)
@@ -111,17 +111,20 @@ module.exports = NodeHelper.create({
         
         var groupByFunc = config.groupBy == "custom" ? config.customGroupBy : groups[config.groupBy];
         var groupedDataset = _.groupBy(filteredDataset, groupByFunc);
-
+        
         var graphData = [];
-        var aggregatesFunc = config.aggregateFunc == "custom" ? config.customAggregateFunc : aggregates[config.aggregateFunc];
+        
+        if (config.aggregateFunc != "minMeanMax") {
+            var aggregatesFunc = config.aggregateFunc == "custom" ? config.customAggregateFunc : aggregates[config.aggregateFunc];
+        } else {
+            var aggregatesFunc = aggregates[aggregateFuncTMP];
+        }
+        
         for ([key, data] of Object.entries(groupedDataset)) {
             graphData.push({ x: key, y: aggregatesFunc(data) });
         }
 
-        var sortedGraphData = graphData.sort((a, b) => moment(b.x) - moment(a.x));
-        console.log(graphData)
-        console.log(sortedGraphData)
-        return sortedGraphData;
+        return graphData;
     },
 
     getData: function (config) {
@@ -138,18 +141,38 @@ module.exports = NodeHelper.create({
                 
                 config.charts.forEach((chart, i) => {
                     // Look for corresponding dataset in response
-                    data = [];
+                    let data = [];
                     response.data.forEach(dataset => {
                         if (dataset.length > 1) 
                             if (dataset[0]["entity_id"] == chart.entity)
-                                data = dataset;
+                                data = JSON.parse(JSON.stringify(dataset));
                     });
 
-                    formattedData.push({
-                        entity: chart.entity,
-                        data: self.formatHassioDataSetIntoGraphData(config, data),
-                        chart: chart
-                    });
+                    if (config.aggregateFunc != "minMeanMax") {
+                        formattedData.push({
+                            entity: chart.entity,
+                            data: self.formatHassioDataSetIntoGraphData(config, data),
+                            chart: chart
+                        });
+                    } else {
+                        ["min", "mean", "max"].forEach((aggregateFuncTMP) => {
+                            // Clone dataset to use multiple times
+                            let clonedDataset = JSON.parse(JSON.stringify(data));
+                            var tmpData = {
+                                entity: chart.entity + "." + aggregateFuncTMP,
+                                data: self.formatHassioDataSetIntoGraphData(config, clonedDataset, aggregateFuncTMP),
+                                chart: JSON.parse(JSON.stringify(chart))
+                            };
+                            tmpData.chart.label = tmpData.chart.label + " (" + aggregateFuncTMP + ")";
+                            if (aggregateFuncTMP == "min" || aggregateFuncTMP == "max"){
+                                tmpData.chart.borderDash = "[5, 15]";
+                            }
+                            if (aggregateFuncTMP == "max") {
+                                tmpData.chart.fill = "-2";
+                            }
+                            formattedData.push(tmpData);
+                        });
+                    }
                 });
 
                 var payload = {
