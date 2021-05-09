@@ -252,7 +252,7 @@ Module.register("MMM-HASS-Chart", {
                     {
                         label: "test a",
                         data: [{ x: 0, y: 1 }, { x: 1, y: 2 }, { x: 2, y: 5 }],
-                        borderColor: Utils.CHART_COLORS.red,
+                        borderColor: "rgba(255, 0, 0, 1)",
                     }
                 ],
             },
