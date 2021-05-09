@@ -246,7 +246,7 @@ Module.register("MMM-HASS-Chart", {
             type: this.config.graphStyle,
             data: {
                 labels: [],
-                datasets: graphdatasets,
+                datasets: [],
             },
             options: options
         });
