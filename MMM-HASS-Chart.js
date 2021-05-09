@@ -233,7 +233,7 @@ Module.register("MMM-HASS-Chart", {
 
     // // Override dom generator.
     getDom: function () {
-
+        console.warning("UpdateDom")
         var wrapper = document.createElement("div");
         // Adding personal name class (fos use in CSS).
         wrapper.className = this.config.name;
