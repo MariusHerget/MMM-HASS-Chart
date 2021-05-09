@@ -133,6 +133,7 @@ Module.register("MMM-HASS-Chart", {
                                     if (ds.data.length == pds.data[i].length) {
                                         var reloadTable = false;
                                         // Some y value changed
+                                        console.log("Some y value changed.")
                                         // update x by x
                                         ds.data.forEach((element, k) => {
                                             if (element.x == pds.data[k].x) {
@@ -152,6 +153,7 @@ Module.register("MMM-HASS-Chart", {
                                     }
                                     else {
                                         var reloadTable = false;
+                                        console.log("New values at the end.")
                                         // New values at the end
                                         // Update all tot his point
                                         pds.data.forEach((element, k) => {
@@ -165,6 +167,7 @@ Module.register("MMM-HASS-Chart", {
                                                 }
                                             } else {
                                                 // New Data
+                                                console.log("New Data", k, element)
                                                 pds.data.push(element);
                                             }
                                         });
