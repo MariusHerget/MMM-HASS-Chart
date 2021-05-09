@@ -185,7 +185,7 @@ module.exports = NodeHelper.create({
                                     tmpData.chart.backgroundColor ? 
                                           tmpData.chart.backgroundColor 
                                         : (tmpData.chart.borderColor ?
-                                              self(setColorOpacitytmpData.chart.borderColor, "0.2")
+                                               self.setColorOpacity(tmpData.chart.borderColor, "0.2")
                                             : 'rgba(255,255,255,0.2)');
                             }
                             formattedData.push(tmpData);
