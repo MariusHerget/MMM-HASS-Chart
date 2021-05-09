@@ -85,30 +85,116 @@ Module.register("MMM-HASS-Chart", {
         this.sendSocketNotification('GET_HASS_GRAPH_DATA', data);
     },
 
+    reloadEntireChart: function (payload) {
+        if (this.chartData.datasets)
+            this.chartData = {
+                datasets: []
+            };
+
+        payload.formattedData.forEach(element => {
+            var cleanupChartData = element.chart;
+            delete cleanupChartData["entity"];
+            cleanupChartData.data = element.data;
+            this.chartData.datasets.push(cleanupChartData);
+
+            // console.log("cleanupChartData", cleanupChartData);
+        }); 
+        // this.updateDom(self.config.fadeSpeed);
+
+        this.updateChartData();
+    },
+
     // Getting the graph data from helper (all MMM-HASS-Chart modules get it).
     socketNotificationReceived: function (notification, payload) {
+        var self = this;
         if (notification === "HASS_GRAPH_DATA_RESULT") {
             // Checks if the data is to this instanse of the graph module.
             if (this.identifier === payload.identifier) {
                 console.log("HASS_GRAPH_DATA_RESULT", payload);
 
-                this.chartData = {
-                    datasets: []
-                };
-
-                payload.formattedData.forEach(element => {
-                    var cleanupChartData = element.chart;
-                    delete cleanupChartData["entity"];
-                    cleanupChartData.data = element.data;
-                    this.chartData.datasets.push(cleanupChartData);
-
-                    console.log("cleanupChartData", cleanupChartData);
-                });
-
-                this.updateDom(self.config.fadeSpeed);
+                if (this.chartData.datasets.length == payload.formattedData.length) {
+                    // No new charts
+                    this.chartData.datasets.forEach((ds, i) => {
+                        let pds = payload.formattedData[i];
+                        if (ds.data[0] && pds.data[0]) {
+                            if (
+                                ds.data[0].x == pds.data[0].x &&
+                                ds.data[0].y == pds.data[0].y
+                               ) {
+                                // Same starting point
+                                if (
+                                    ds.data[ds.data.length - 1].x == pds.data[pds.data.length - 1].x &&
+                                    ds.data[ds.data.length - 1].y == pds.data[pds.data.length - 1].y
+                                   ) {
+                                    // Same end point
+                                    // No new data - Do not update!
+                                } else {
+                                    // Some value changed
+                                    if (ds.data.length == pds.data[i].length) {
+                                        var reloadTable = false;
+                                        // Some y value changed
+                                        // update x by x
+                                        ds.data.forEach((element, k) => {
+                                            if (element.x == pds.data[k].x) {
+                                                element.y = pds.data[k].y
+                                            }
+                                            else {
+                                                reloadTable = true;
+                                                // ToDo: Stop foreach
+                                            }
+                                        });
+                                        if (reloadTable) {
+                                            // Backup some x values changed
+                                            self.reloadEntireChart(payload);
+                                        } else {
+                                            // this.updateDom(self.config.fadeSpeed);
+                                            this.updateChartData();
+                                        }
+                                    }
+                                    else {
+                                        var reloadTable = false;
+                                        // New values at the end
+                                        // Update all tot his point
+                                        pds.data.forEach((element, k) => {
+                                            if (k < ds.data.length) {
+                                                if (element.x == pds.data[k].x) {
+                                                    element.y = pds.data[k].y
+                                                }
+                                                else {
+                                                    reloadTable = true;
+                                                    // ToDo: Stop foreach
+                                                }
+                                            } else {
+                                                // New Data
+                                                ds.data.push(element);
+                                            }
+                                        });
+                                        if (reloadTable) {
+                                            // Backup some x values changed
+                                            self.reloadEntireChart(payload);
+                                        } else {
+                                            // this.updateDom(self.config.fadeSpeed);
+                                            this.updateChartData();
+                                        }
+                                    }
+                                }
+                            } else {
+                                // Reload entire table
+                                self.reloadEntireChart(payload);
+                            }
+                        } else {
+                            // Reload entire table
+                            self.reloadEntireChart(payload);
+                        }
+                    });
+                } else {
+                    // Reload entire table
+                    self.reloadEntireChart(payload);
+                }
             }
         }
     },
+
 
     // Updating routine.
     scheduleUpdate: function (delay) {
@@ -126,18 +212,7 @@ Module.register("MMM-HASS-Chart", {
     // Parsing the data and preparing for the graph chart.
     updateChartData: function () {
         if (this.myChart !== 'undefined') {
-            // Adding the labels to the chart.
-            // this.myChart.data.labels = this.chartData.labels;
-            // // Adding the data to the chart.
             this.myChart.data.datasets = this.chartData.datasets;
-            // this.chartData.forEach(dataset => {
-            //     this.myChart.data.push(
-            //         {
-            //             label: "test a",
-            //             borderColor: dataset.chart
-            //             data: dataset.data
-            //         });
-            // });
             this.myChart.update();
         }
     },
@@ -145,24 +220,28 @@ Module.register("MMM-HASS-Chart", {
     // // Override dom generator.
     getDom: function () {
 
-        var wrapper = document.createElement("div");
-        // Adding personal name class (fos use in CSS).
-        wrapper.className = this.config.name;
-        // Creating the canvas.
-        this.ctx = document.createElement("canvas");
-        // Adding the canvas to the document wrapper.
-        wrapper.appendChild(this.ctx);
-
         // Setting the defaults.
-        this.myChart = new Chart(this.ctx, {
-            type: this.config.chartType,
-            data: {
-                datasets: [],
-            },
-            options: this.config.chartOptions
-        });
+        if (!this.wrapper || !this.myChart) {
+            var wrapper = document.createElement("div");
+            // Adding personal name class (fos use in CSS).
+            wrapper.className = this.config.name;
+            // Creating the canvas.
+            this.ctx = document.createElement("canvas");
+            // Adding the canvas to the document wrapper.
+            wrapper.appendChild(this.ctx);
 
+            this.myChart = new Chart(this.ctx, {
+                type: this.config.chartType,
+                data: {
+                    datasets: [],
+                },
+                options: this.config.chartOptions
+            });
+            this.wrapper = wrapper;
+            
+        } 
         this.updateChartData();
-        return wrapper;
+        return this.wrapper;
+
     }
 });
