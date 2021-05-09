@@ -16,10 +16,9 @@ module.exports = NodeHelper.create({
         }
 
         if (config.debuglogging) {
-            console.log(url);
+            console.log("buildBaseHassUrl", url);
         }
 
-        console.log(url);
         if (config.https) {
             return 'https://' + url;
         } else {
@@ -40,7 +39,9 @@ module.exports = NodeHelper.create({
             url = url + "&end_time=" + encodeURIComponent(config.end);
         }
 
-        console.log(url);
+        if (config.debuglogging) {
+            console.log("buildRequestHassUrl", url);
+        }
         return url;
     },
 
@@ -72,7 +73,6 @@ module.exports = NodeHelper.create({
                 config.charts.forEach((chart, i) => {
                     // Look for corresponding dataset in response
                     data = [];
-                    console.log(response.data[0][1])
                     response.data.forEach(dataset => {
                         if (dataset.length > 1) 
                             if (dataset[0]["entity_id"] == chart.entity)
@@ -96,6 +96,7 @@ module.exports = NodeHelper.create({
             .catch(function (error) {
                 // handle error
                 console.log(error);
+                console.error(error);
             })
             .then(function () {
                 // always executed
@@ -103,9 +104,7 @@ module.exports = NodeHelper.create({
     },
 
     socketNotificationReceived: function (notification, payload) {
-        console.log('MMM-Chart-Hass received ', notification);
         if (notification === 'GET_HASS_GRAPH_DATA') {
-            console.log('MMM-Chart-Hass received and recognized ', notification);
             this.getData(payload);
         }
     },
