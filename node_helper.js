@@ -77,23 +77,17 @@ module.exports = NodeHelper.create({
 
         
         if (config.start_days) {
-            var date = Date.now();
-            date.setHours(0, 0, 0, 0);
-            var start = new Date(date - config.start_days * 24 * 60 * 60 * 1000).toISOString();
+            var dat = new Date(Date.now()).setHours(0, 0, 0, 0);
+            var start = new Date(dat - Number(config.start_days) * 24 * 60 * 60 * 1000).toISOString();
         } else {
             var start = config.start_timestamp;
         }
 
-        console.log("start", config.start_days);
-        console.log(start);
         url = '/api/history/period/' + start  + "?minimal_response=true&filter_entity_id=" + entities;
 
         if (config.end_days) {
-            var date = Date.now();
-            date.setHours(23, 59, 59, 999);
-            var end = new Date(date - config.end_days * 24 * 60 * 60 * 1000).toISOString();
-            console.log("end", config.end_days)
-            console.log(end)
+            var dat = new Date(Date.now()).setHours(23, 59, 59, 999);
+            var end = new Date(dat - Number(config.end_days) * 24 * 60 * 60 * 1000).toISOString();
             url = url + "&end_time=" + encodeURIComponent(end);
         }
         else if (config.end_timestamp) {
