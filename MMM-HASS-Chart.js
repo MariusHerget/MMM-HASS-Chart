@@ -263,9 +263,11 @@ Module.register("MMM-HASS-Chart", {
             });
             this.wrapper = wrapper;
             console.log("!! Update Wrapper END !!", this.wrapper, this.myChart)
+            this.updateChartData();
+            return wrapper;
+        } else {
+            this.updateChartData();
         }
 
-        this.updateChartData();
-        return this.wrapper;
     }
 });
