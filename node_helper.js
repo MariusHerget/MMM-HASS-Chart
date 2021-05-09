@@ -171,7 +171,7 @@ module.exports = NodeHelper.create({
                             };
                             tmpData.chart.label = tmpData.chart.label + " (" + aggregateFuncTMP + ")";
                             if (aggregateFuncTMP == "min" || aggregateFuncTMP == "max"){
-                                tmpData.chart.borderDash = "[5, 15]";
+                                tmpData.chart.borderDash = [5, 15];
                             }
                             if (aggregateFuncTMP == "max") {
                                 tmpData.chart.fill = "-2";
