@@ -76,15 +76,6 @@ Module.register("MMM-HASS-Chart", {
         this.chartData = { labels: [], datasets: [] }
         this.config.identifier = this.identifier;
 
-        this.myChart = new Chart(this.ctx, {
-            type: this.config.chartType,
-            data: {
-                datasets: [],
-            },
-            options: this.config.chartOptions
-        });
-
-
         // Triggers the get data.
         this.getData(this.config);
     },
@@ -198,6 +189,14 @@ Module.register("MMM-HASS-Chart", {
                         }
                     });
                 } else {
+                    this.myChart = new Chart(this.ctx, {
+                        type: this.config.chartType,
+                        data: {
+                            datasets: [],
+                        },
+                        options: this.config.chartOptions
+                    });
+
                     // Reload entire table
                     self.reloadEntireChart(payload);
                 }
@@ -243,17 +242,29 @@ Module.register("MMM-HASS-Chart", {
     // // Override dom generator.
     getDom: function () {
         console.log("!! UpdateDom !!")
-        var wrapper = document.createElement("div");
-        // Adding personal name class (fos use in CSS).
-        wrapper.className = this.config.name;
-        // Creating the canvas.
-        this.ctx = document.createElement("canvas");
-        // Adding the canvas to the document wrapper.
-        wrapper.appendChild(this.ctx);
 
         // Setting the defaults.
+        if (this.wrapper == 'undefined' || this.myChart == 'undefined') {
+            console.log("!! Update Wrapper !!")
+            var wrapper = document.createElement("div");
+            // Adding personal name class (fos use in CSS).
+            wrapper.className = this.config.name;
+            // Creating the canvas.
+            this.ctx = document.createElement("canvas");
+            // Adding the canvas to the document wrapper.
+            wrapper.appendChild(this.ctx);
+
+            this.myChart = new Chart(this.ctx, {
+                type: this.config.chartType,
+                data: {
+                    datasets: [],
+                },
+                options: this.config.chartOptions
+            });
+            this.wrapper = wrapper;
+        }
 
         this.updateChartData();
-        return wrapper;
+        return this.wrapper;
     }
 });
