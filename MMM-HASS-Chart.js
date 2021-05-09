@@ -92,22 +92,103 @@ Module.register("MMM-HASS-Chart", {
             if (this.identifier === payload.identifier) {
                 console.log("HASS_GRAPH_DATA_RESULT", payload);
 
-                this.chartData = {
-                    datasets: []
-                };
-
-                payload.formattedData.forEach(element => {
-                    var cleanupChartData = element.chart;
-                    delete cleanupChartData["entity"];
-                    cleanupChartData.data = element.data;
-                    this.chartData.datasets.push(cleanupChartData);
-
-                    console.log("cleanupChartData", cleanupChartData);
-                });
-
-                this.updateDom(self.config.fadeSpeed);
+                if (this.chartData.datasets.length == payload.formattedData.length) {
+                    // No new charts
+                    this.chartData.datasets.forEach((ds, i) => {
+                        let pds = payload.formattedData[i];
+                        if (ds.data[0] && pds.data[0]) {
+                            if (
+                                ds[0].data.x == pds.data[0].x &&
+                                ds[0].data.y == pds.data[0].y
+                               ) {
+                                // Same starting point
+                                if (
+                                    ds.data[ds.data.length - 1].x == pds.data[-1].x &&
+                                    ds.data[ds.data.length - 1].y == pds.data[-1].y
+                                   ) {
+                                    // Same end point
+                                    // No new data - Do not update!
+                                } else {
+                                    // Some value changed
+                                    if (ds.data.length == payload.formattedData.data[i].length) {
+                                        var reloadTable = false;
+                                        // Some y value changed
+                                        // update x by x
+                                        ds.data.forEach((element, k) => {
+                                            if (element.x == pds.data[k].x) {
+                                                element.y = pds.data[k].y
+                                            }
+                                            else {
+                                                reloadTable = true;
+                                                // ToDo: Stop foreach
+                                            }
+                                        });
+                                        if (reloadTable) {
+                                            // Backup some x values changed
+                                            self.reloadEntireChart(payload);
+                                        } else {
+                                            this.updateDom(self.config.fadeSpeed);
+                                        }
+                                    }
+                                    else {
+                                        var reloadTable = false;
+                                        // New values at the end
+                                        // Update all tot his point
+                                        pds.data.forEach((element, k) => {
+                                            if (k < ds.data.length) {
+                                                if (element.x == pds.data[k].x) {
+                                                    element.y = pds.data[k].y
+                                                }
+                                                else {
+                                                    reloadTable = true;
+                                                    // ToDo: Stop foreach
+                                                }
+                                            } else {
+                                                // New Data
+                                                pds.data.push(element);
+                                            }
+                                        });
+                                        if (reloadTable) {
+                                            // Backup some x values changed
+                                            self.reloadEntireChart(payload);
+                                        } else {
+                                            this.updateDom(self.config.fadeSpeed);
+                                        }
+                                    }
+                                }
+                            } else {
+                                // Reload entire table
+                                self.reloadEntireChart(payload);
+                            }
+                        } else {
+                            // Reload entire table
+                            self.reloadEntireChart(payload);
+                        }
+                    });
+                } else {
+                    // Reload entire table
+                    self.reloadEntireChart(payload);
+                }
             }
         }
+    },
+
+    reloadEntireChart: function (payload) {
+        if (this.chartData.datasets)
+            this.chartData = {
+                datasets: []
+            };
+
+        payload.formattedData.forEach(element => {
+            var cleanupChartData = element.chart;
+            delete cleanupChartData["entity"];
+            cleanupChartData.data = element.data;
+            this.chartData.datasets.push(cleanupChartData);
+
+            // console.log("cleanupChartData", cleanupChartData);
+        });
+
+        this.updateDom(self.config.fadeSpeed);
     },
 
     // Updating routine.
@@ -118,6 +199,7 @@ Module.register("MMM-HASS-Chart", {
         }
         // Time is up!
         var self = this;
+        console.log("nextLoad ("+this.identifier+"):", nextLoad);
         setInterval(function () {
             self.getData(self.config);
         }, nextLoad);
