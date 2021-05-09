@@ -21,9 +21,6 @@ Module.register("MMM-HASS-Chart", {
         host: 'localhost',
         port: '8083',
         https: false,
-        initialLoadDelay: 1000,
-        hassiotoken: false, // True: OAuth bearer token for API is in environment variable HASSIO_TOKEN (useful when running as a hassio add-on)
-        updateInterval: 60 * 1000, // every 60 seconds
         groupBy: "byDay",
         aggregateFunc: "mean",
 
@@ -33,8 +30,8 @@ Module.register("MMM-HASS-Chart", {
 
         // Animation speed.
         fadeSpeed: 1000,
-        
         chartType: "line",
+        updateInterval: 60 * 1000, // every 60 seconds
         options: {
             responsive: true,
             maintainAspectRatio: true,

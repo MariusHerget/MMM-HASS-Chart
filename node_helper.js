@@ -1,5 +1,5 @@
 // TODO add back in after testing
-// var NodeHelper = require('node_helper'); 
+var NodeHelper = require('node_helper'); 
 const axios = require('axios').default;
 const _ = require("lodash");
 const moment = require("moment");
@@ -21,7 +21,7 @@ const groups = (() => {
         bySixHours,
         byMonth,
         byWeek,
-        byYear,
+        byYear
     };
 })();
 
@@ -43,8 +43,8 @@ const aggregates ={
     }
 };
 
-// module.exports = NodeHelper.create({
-module.exports = ({
+module.exports = NodeHelper.create({
+// module.exports = ({
     start: function () {
         console.log('MMM-Chart-Hass helper started...');
     },
@@ -109,15 +109,19 @@ module.exports = ({
             }
         });
         
-        var groupedDataset = _.groupBy(filteredDataset, groups[config.groupBy])
+        var groupByFunc = config.groupBy == "custom" ? config.customGroupBy : groups[config.groupBy];
+        var groupedDataset = _.groupBy(filteredDataset, groupByFunc);
 
         var graphData = [];
+        var aggregatesFunc = config.aggregateFunc == "custom" ? config.customAggregateFunc : aggregates[config.aggregateFunc];
         for ([key, data] of Object.entries(groupedDataset)) {
-            graphData.push({ x: key, y: aggregates[config.aggregateFunc](data) });
+            graphData.push({ x: key, y: aggregatesFunc(data) });
         }
 
+        var sortedGraphData = graphData.sort((a, b) => moment(b.x) - moment(a.x));
         console.log(graphData)
-        return graphData;
+        console.log(sortedGraphData)
+        return sortedGraphData;
     },
 
     getData: function (config) {
@@ -153,7 +157,7 @@ module.exports = ({
                     formattedData: formattedData
                 }
 
-                // self.sendSocketNotification('HASS_GRAPH_DATA_RESULT', payload);
+                self.sendSocketNotification('HASS_GRAPH_DATA_RESULT', payload);
             })
             .catch(function (error) {
                 // handle error

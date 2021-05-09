@@ -28,7 +28,6 @@
     "axios": "latest",
     "chart.js": "latest",
     "lodash": "^4.17.21",
-    "moment": "^2.29.1",
-    "underscore": "latest"
+    "moment": "^2.29.1"
   }
 }
