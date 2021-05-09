@@ -192,6 +192,7 @@ Module.register("MMM-HASS-Chart", {
                     // Reload entire table
                     self.reloadEntireChart(payload);
                 }
+                this.updateDom(self.config.fadeSpeed);
             }
         }
     },
