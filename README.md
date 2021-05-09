@@ -76,6 +76,8 @@ Since Home Assitant historical data from sensors are difficult to display direct
 
 `groupBy`: 
 - **byHour**
+- **byMinute**
+- **bySecond**
 - **bySixHours** (0-5, 6-11, 12-17, 17-23)
 - **byDay**
 - **byMonth**

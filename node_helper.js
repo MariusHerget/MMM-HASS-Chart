@@ -7,6 +7,8 @@ const moment = require("moment");
 const groups = (() => {
     const byDay = (item) => moment(item.x).format('DD.MM.YYYY'),
         byHour = (item) => byDay(item) + ' ' + moment(item.x).format('HH'),
+        byMinute = (item) => byHour(item) + ':' + moment(item.x).format('mm'),
+        bySecond = (item) => byMinute(item) + ':' + moment(item.x).format('ss'),
         bySixHours = (item) => {
             const m = moment(item.x);
             const k = (Number(m.format('HH')) - (Number(m.format('HH')%6)))/6;
@@ -18,6 +20,8 @@ const groups = (() => {
     return {
         byDay,
         byHour,
+        byMinute,
+        bySecond,
         bySixHours,
         byMonth,
         byWeek,
@@ -129,7 +133,7 @@ module.exports = NodeHelper.create({
             }
             graphData.push({ x: key, y: y});
         }
-
+        
         return graphData;
     },
 
