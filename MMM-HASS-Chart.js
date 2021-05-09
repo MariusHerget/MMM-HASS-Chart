@@ -86,7 +86,6 @@ Module.register("MMM-HASS-Chart", {
     },
 
     reloadEntireChart: function (payload) {
-        console.log("!!! reload entire table")
         if (this.chartData.datasets)
             this.chartData = {
                 datasets: []
@@ -129,13 +128,11 @@ Module.register("MMM-HASS-Chart", {
                                    ) {
                                     // Same end point
                                     // No new data - Do not update!
-                                    console.log("No new Data. Dont update dom");
                                 } else {
                                     // Some value changed
                                     if (ds.data.length == pds.data[i].length) {
                                         var reloadTable = false;
                                         // Some y value changed
-                                        console.log("Some y value changed.")
                                         // update x by x
                                         ds.data.forEach((element, k) => {
                                             if (element.x == pds.data[k].x) {
@@ -156,7 +153,6 @@ Module.register("MMM-HASS-Chart", {
                                     }
                                     else {
                                         var reloadTable = false;
-                                        console.log("New values at the end.")
                                         // New values at the end
                                         // Update all tot his point
                                         pds.data.forEach((element, k) => {
@@ -170,7 +166,6 @@ Module.register("MMM-HASS-Chart", {
                                                 }
                                             } else {
                                                 // New Data
-                                                console.log("New Data", k, element)
                                                 ds.data.push(element);
                                             }
                                         });
@@ -209,7 +204,6 @@ Module.register("MMM-HASS-Chart", {
         }
         // Time is up!
         var self = this;
-        console.log("nextLoad ("+this.identifier+"):", nextLoad);
         setInterval(function () {
             self.getData(self.config);
         }, nextLoad);
@@ -218,30 +212,16 @@ Module.register("MMM-HASS-Chart", {
     // Parsing the data and preparing for the graph chart.
     updateChartData: function () {
         if (this.myChart !== 'undefined') {
-            // Adding the labels to the chart.
-            // this.myChart.data.labels = this.chartData.labels;
-            // // Adding the data to the chart.
             this.myChart.data.datasets = this.chartData.datasets;
-            // this.chartData.forEach(dataset => {
-            //     this.myChart.data.push(
-            //         {
-            //             label: "test a",
-            //             borderColor: dataset.chart
-            //             data: dataset.data
-            //         });
-            // });
-            console.log("!! this.myChart.update() !!")
             this.myChart.update();
         }
     },
 
     // // Override dom generator.
     getDom: function () {
-        console.log("!! UpdateDom !!", this.wrapper, this.myChart)
 
         // Setting the defaults.
         if (!this.wrapper || !this.myChart) {
-            console.log("!! Update Wrapper !!")
             var wrapper = document.createElement("div");
             // Adding personal name class (fos use in CSS).
             wrapper.className = this.config.name;
@@ -258,7 +238,6 @@ Module.register("MMM-HASS-Chart", {
                 options: this.config.chartOptions
             });
             this.wrapper = wrapper;
-            console.log("!! Update Wrapper END !!", this.wrapper, this.myChart)
             
         } 
         this.updateChartData();
