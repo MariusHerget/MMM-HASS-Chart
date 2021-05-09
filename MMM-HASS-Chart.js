@@ -129,7 +129,7 @@ Module.register("MMM-HASS-Chart", {
     getScripts: function () {
         return [
             // Used to create the actual chart.
-            'node_modules/chart.js/dist/Chart.min.js',
+            this.file('node_modules/chart.js/dist/Chart.min.js'),
             // Used to handle the mouse and touch interactions.
             'node_modules/hammerjs/hammer.min.js',
             // Used for interaction with the graph to be able to zoom and pan.
