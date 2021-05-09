@@ -1,9 +1,8 @@
 // TODO add back in after testing
-// var NodeHelper = require('node_helper'); 
-var _ = require('underscore');
+var NodeHelper = require('node_helper'); 
 const axios = require('axios').default;
 
-module.exports = {
+module.exports = NodeHelper.create({
     start: function () {
         console.log('MMM-Chart-Hass helper started...');
     },

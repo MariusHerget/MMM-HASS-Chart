@@ -26,7 +26,6 @@
   "homepage": "git+https://github.com/MariusHerget/MMM-HASS-Chart#readme",
   "dependencies": {
     "chart.js": "latest",
-    "chartjs-plugin-zoom": "latest",
     "underscore": "latest",
     "axios": "latest"
   }
