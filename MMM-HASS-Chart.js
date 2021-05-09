@@ -84,7 +84,24 @@ Module.register("MMM-HASS-Chart", {
     getData: function (data) {
         this.sendSocketNotification('GET_HASS_GRAPH_DATA', data);
     },
+    
+    reloadEntireChart: function (payload) {
+        if (this.chartData.datasets)
+            this.chartData = {
+                datasets: []
+            };
 
+        payload.formattedData.forEach(element => {
+            var cleanupChartData = element.chart;
+            delete cleanupChartData["entity"];
+            cleanupChartData.data = element.data;
+            this.chartData.datasets.push(cleanupChartData);
+
+            // console.log("cleanupChartData", cleanupChartData);
+        });
+
+        this.updateDom(self.config.fadeSpeed);
+    },
     // Getting the graph data from helper (all MMM-HASS-Chart modules get it).
     socketNotificationReceived: function (notification, payload) {
         if (notification === "HASS_GRAPH_DATA_RESULT") {
@@ -173,23 +190,6 @@ Module.register("MMM-HASS-Chart", {
         }
     },
 
-    reloadEntireChart: function (payload) {
-        if (this.chartData.datasets)
-            this.chartData = {
-                datasets: []
-            };
-
-        payload.formattedData.forEach(element => {
-            var cleanupChartData = element.chart;
-            delete cleanupChartData["entity"];
-            cleanupChartData.data = element.data;
-            this.chartData.datasets.push(cleanupChartData);
-
-            // console.log("cleanupChartData", cleanupChartData);
-        });
-
-        this.updateDom(self.config.fadeSpeed);
-    },
 
     // Updating routine.
     scheduleUpdate: function (delay) {
