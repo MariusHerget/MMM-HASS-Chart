@@ -77,7 +77,12 @@ module.exports = NodeHelper.create({
 
         url = '/api/history/period/' + config.start + "?minimal_response=true&filter_entity_id=" + entities;
 
-        if (config.end) {
+        if (config.end_daysInPast) {
+            var date = Date.now();
+            date.setHours(0, 0, 0, 0);
+            var end = new Date(date - config.end_daysInPast * 24 * 60 * 60 * 1000)
+            url = url + "&end_time=" + encodeURIComponent(end.toISOString());
+        } else if (config.end) {
             url = url + "&end_time=" + encodeURIComponent(config.end);
         }
 

@@ -247,14 +247,6 @@ Module.register("MMM-HASS-Chart", {
                 mode: 'xy',
             },
             scales: {
-                scales: {
-                    x: {
-                        type: 'time',
-                        time: {
-                            unit: 'month'
-                        }
-                    }
-                }
             }
         };
         // Start of the Scales.
