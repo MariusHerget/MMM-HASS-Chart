@@ -168,7 +168,7 @@ Module.register("MMM-HASS-Chart", {
 
                 payload.formattedData.forEach(element => {
                     var cleanupChartData = element.chart;
-                    cleanupChartData.delete("entity");
+                    delete cleanupChartData["entity"];
                     cleanupChartData.data = element.data;
                     this.chartData.datasets.push(cleanupChartData);
 
