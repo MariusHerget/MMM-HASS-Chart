@@ -100,7 +100,9 @@ Module.register("MMM-HASS-Chart", {
 
             // console.log("cleanupChartData", cleanupChartData);
         }); 
-        this.updateDom(self.config.fadeSpeed);
+        // this.updateDom(self.config.fadeSpeed);
+
+        this.updateChartData();
     },
 
     // Getting the graph data from helper (all MMM-HASS-Chart modules get it).
@@ -127,6 +129,7 @@ Module.register("MMM-HASS-Chart", {
                                    ) {
                                     // Same end point
                                     // No new data - Do not update!
+                                    console.log("No new Data. Dont update dom");
                                 } else {
                                     // Some value changed
                                     if (ds.data.length == pds.data[i].length) {
