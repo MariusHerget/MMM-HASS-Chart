@@ -1,6 +1,6 @@
 // TODO add back in after testing
 var NodeHelper = require('node_helper'); 
-const axios = require('axios').default;
+// const axios = require('axios').default;
 const _ = require("lodash");
 const moment = require("moment");
 
@@ -134,7 +134,7 @@ module.exports = NodeHelper.create({
     },
 
     setColorOpacity: function(color, opacity) {
-        color.replace(/rgba?(\(\s*\d+\s*,\s*\d+\s*,\s*\d+)(?:\s*,.+?)?\)/, 'rgba$1,'+opacity+')');
+        return color.replace(/rgba?(\(\s*\d+\s*,\s*\d+\s*,\s*\d+)(?:\s*,.+?)?\)/, 'rgba$1,'+opacity+')');
     },
 
     getData: function (config) {
