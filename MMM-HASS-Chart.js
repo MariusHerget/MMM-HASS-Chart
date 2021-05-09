@@ -147,7 +147,8 @@ Module.register("MMM-HASS-Chart", {
                                             // Backup some x values changed
                                             self.reloadEntireChart(payload);
                                         } else {
-                                            this.updateDom(self.config.fadeSpeed);
+                                            // this.updateDom(self.config.fadeSpeed);
+                                            this.updateChartData();
                                         }
                                     }
                                     else {
@@ -174,7 +175,8 @@ Module.register("MMM-HASS-Chart", {
                                             // Backup some x values changed
                                             self.reloadEntireChart(payload);
                                         } else {
-                                            this.updateDom(self.config.fadeSpeed);
+                                            // this.updateDom(self.config.fadeSpeed);
+                                            this.updateChartData();
                                         }
                                     }
                                 }
