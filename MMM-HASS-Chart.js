@@ -131,7 +131,7 @@ Module.register("MMM-HASS-Chart", {
             // Used to create the actual chart.
             this.file('node_modules/chart.js/dist/chart.js'),
             // // Used to handle the mouse and touch interactions.
-            // this.file('node_modules/hammerjs/hammer.min.js'),
+            this.file('node_modules/hammerjs/hammer.min.js'),
             // // Used for interaction with the graph to be able to zoom and pan.
             // // this.file('node_modules/chartjs-plugin-zoom/chartjs-plugin-zoom.min.js'),
             // // Used for HTTP(s) requests
