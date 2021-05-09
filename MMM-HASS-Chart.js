@@ -161,6 +161,7 @@ Module.register("MMM-HASS-Chart", {
             // Checks if the data is to this instanse of the graph module.
             if (this.identifier === payload.identifier) {
                 console.log("HASS_GRAPH_DATA_RESULT", payload);
+                this.updateDom(self.config.fadeSpeed);
             }
         }
     },
@@ -245,8 +246,8 @@ Module.register("MMM-HASS-Chart", {
         this.myChart = new Chart(this.ctx, {
             type: this.config.graphStyle,
             data: {
-                labels: [],
-                datasets: [],
+                labels: ["test 0", "test 1", "test 2"],
+                datasets: [{ x: 0, y: 1 }, { x: 1, y: 2 }, { x: 2, y: 5}],
             },
             options: options
         });
