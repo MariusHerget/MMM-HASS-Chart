@@ -235,6 +235,7 @@ Module.register("MMM-HASS-Chart", {
             //             data: dataset.data
             //         });
             // });
+            console.log("!! this.myChart.update() !!")
             this.myChart.update();
         }
     },
