@@ -193,39 +193,67 @@ Module.register("MMM-HASS-Chart", {
     // },
 
     // // Override dom generator.
-    // getDom: function () {
+    getDom: function () {
 
-    //     // Setting the time scale.
-    //     if (this.config.xaxisTimeUnit == "millisecond") {
-    //         options.scales.xAxes[0].time.displayFormats.millisecond = this.config.xaxisTimeFormatLabels
-    //     } else if (this.config.xaxisTimeUnit == "second") {
-    //         options.scales.xAxes[0].time.displayFormats.second = this.config.xaxisTimeFormatLabels
-    //     } else if (this.config.xaxisTimeUnit == "minute") {
-    //         options.scales.xAxes[0].time.displayFormats.minute = this.config.xaxisTimeFormatLabels
-    //     } else if (this.config.xaxisTimeUnit == "hour") {
-    //         options.scales.xAxes[0].time.displayFormats.hour = this.config.xaxisTimeFormatLabels
-    //     } else if (this.config.xaxisTimeUnit == "day") {
-    //         options.scales.xAxes[0].time.displayFormats.day = this.config.xaxisTimeFormatLabels
-    //     } else if (this.config.xaxisTimeUnit == "week") {
-    //         options.scales.xAxes[0].time.displayFormats.week = this.config.xaxisTimeFormatLabels
-    //     } else if (this.config.xaxisTimeUnit == "month") {
-    //         options.scales.xAxes[0].time.displayFormats.month = this.config.xaxisTimeFormatLabels
-    //     } else if (this.config.xaxisTimeUnit == "quarter") {
-    //         options.scales.xAxes[0].time.displayFormats.quarter = this.config.xaxisTimeFormatLabels
-    //     } else if (this.config.xaxisTimeUnit == "year") {
-    //         options.scales.xAxes[0].time.displayFormats.year = this.config.xaxisTimeFormatLabels
-    //     }
+        var wrapper = document.createElement("div");
+        // Adding personal name class (fos use in CSS).
+        wrapper.className = this.config.name;
+        // Creating the canvas.
+        this.ctx = document.createElement("canvas");
+        // Adding the canvas to the document wrapper.
+        wrapper.appendChild(this.ctx);
 
-    //     // Creating the actual graph.
-    //     this.myChart = new Chart(this.ctx, {
-    //         type: this.config.graphStyle,
-    //         data: {
-    //             labels: [],
-    //             datasets: graphdatasets,
-    //         },
-    //         options: options
-    //     });
-    //     this.updateChartData();
-    //     return wrapper;
-    // }
+        // Setting the defaults.
+        Chart.defaults.global.defaultFontSize = this.config.defaultFontSize;
+        Chart.defaults.global.defaultFontFamily = this.config.defaultFontFamily;
+        Chart.defaults.global.defaultFontColor = this.config.defaultFontColor;
+
+        var options = {
+            type: 'line',
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    title: {
+                        display: true,
+                        text: 'Chart.js Line Chart'
+                    }
+                }
+            },
+        };
+        // // Setting the time scale.
+        // if (this.config.xaxisTimeUnit == "millisecond") {
+        //     options.scales.xAxes[0].time.displayFormats.millisecond = this.config.xaxisTimeFormatLabels
+        // } else if (this.config.xaxisTimeUnit == "second") {
+        //     options.scales.xAxes[0].time.displayFormats.second = this.config.xaxisTimeFormatLabels
+        // } else if (this.config.xaxisTimeUnit == "minute") {
+        //     options.scales.xAxes[0].time.displayFormats.minute = this.config.xaxisTimeFormatLabels
+        // } else if (this.config.xaxisTimeUnit == "hour") {
+        //     options.scales.xAxes[0].time.displayFormats.hour = this.config.xaxisTimeFormatLabels
+        // } else if (this.config.xaxisTimeUnit == "day") {
+        //     options.scales.xAxes[0].time.displayFormats.day = this.config.xaxisTimeFormatLabels
+        // } else if (this.config.xaxisTimeUnit == "week") {
+        //     options.scales.xAxes[0].time.displayFormats.week = this.config.xaxisTimeFormatLabels
+        // } else if (this.config.xaxisTimeUnit == "month") {
+        //     options.scales.xAxes[0].time.displayFormats.month = this.config.xaxisTimeFormatLabels
+        // } else if (this.config.xaxisTimeUnit == "quarter") {
+        //     options.scales.xAxes[0].time.displayFormats.quarter = this.config.xaxisTimeFormatLabels
+        // } else if (this.config.xaxisTimeUnit == "year") {
+        //     options.scales.xAxes[0].time.displayFormats.year = this.config.xaxisTimeFormatLabels
+        // }
+
+        // Creating the actual graph.
+        this.myChart = new Chart(this.ctx, {
+            type: this.config.graphStyle,
+            data: {
+                labels: [],
+                datasets: graphdatasets,
+            },
+            options: options
+        });
+        this.updateChartData();
+        return wrapper;
+    }
 });
