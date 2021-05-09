@@ -99,9 +99,8 @@ Module.register("MMM-HASS-Chart", {
             this.chartData.datasets.push(cleanupChartData);
 
             // console.log("cleanupChartData", cleanupChartData);
-        });
-
-        this.updateChartData();
+        }); 
+        this.updateDom(self.config.fadeSpeed);
     },
 
     // Getting the graph data from helper (all MMM-HASS-Chart modules get it).
@@ -148,7 +147,7 @@ Module.register("MMM-HASS-Chart", {
                                             // Backup some x values changed
                                             self.reloadEntireChart(payload);
                                         } else {
-                                            this.updateChartData();
+                                            this.updateDom(self.config.fadeSpeed);
                                         }
                                     }
                                     else {
@@ -175,7 +174,7 @@ Module.register("MMM-HASS-Chart", {
                                             // Backup some x values changed
                                             self.reloadEntireChart(payload);
                                         } else {
-                                            this.updateChartData();
+                                            this.updateDom(self.config.fadeSpeed);
                                         }
                                     }
                                 }
@@ -200,7 +199,6 @@ Module.register("MMM-HASS-Chart", {
                     // Reload entire table
                     self.reloadEntireChart(payload);
                 }
-                this.updateDom(self.config.fadeSpeed);
             }
         }
     },
