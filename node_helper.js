@@ -121,7 +121,13 @@ module.exports = NodeHelper.create({
         }
         
         for ([key, data] of Object.entries(groupedDataset)) {
-            graphData.push({ x: key, y: aggregatesFunc(data) });
+            var y = null;
+            if (aggregateFuncTMP in ["min", "max"]) {
+                y = aggregatesFunc(data).y;
+            } else {
+                y = aggregatesFunc(data);
+            }
+            graphData.push({ x: key, y: aggregatesFunc(data)});
         }
 
         return graphData;
