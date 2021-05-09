@@ -86,6 +86,7 @@ Module.register("MMM-HASS-Chart", {
     },
 
     reloadEntireChart: function (payload) {
+        console.log("!!! reload entire table")
         if (this.chartData.datasets)
             this.chartData = {
                 datasets: []
