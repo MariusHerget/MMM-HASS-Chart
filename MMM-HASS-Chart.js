@@ -76,6 +76,15 @@ Module.register("MMM-HASS-Chart", {
         this.chartData = { labels: [], datasets: [] }
         this.config.identifier = this.identifier;
 
+        this.myChart = new Chart(this.ctx, {
+            type: this.config.chartType,
+            data: {
+                datasets: [],
+            },
+            options: this.config.chartOptions
+        });
+
+
         // Triggers the get data.
         this.getData(this.config);
     },
@@ -243,13 +252,6 @@ Module.register("MMM-HASS-Chart", {
         wrapper.appendChild(this.ctx);
 
         // Setting the defaults.
-        this.myChart = new Chart(this.ctx, {
-            type: this.config.chartType,
-            data: {
-                datasets: [],
-            },
-            options: this.config.chartOptions
-        });
 
         this.updateChartData();
         return wrapper;
