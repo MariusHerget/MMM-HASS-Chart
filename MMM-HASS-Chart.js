@@ -119,7 +119,7 @@ Module.register("MMM-HASS-Chart", {
     
     // Get the Module CSS.
     getStyles: function () {
-        return ["css/MMM-HASS-Chart.css"];
+        return [this.file("css/MMM-HASS-Chart.css")];
     },
 
     // Get the needed scripts to make graphs.
