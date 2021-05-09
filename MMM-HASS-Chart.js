@@ -238,6 +238,7 @@ Module.register("MMM-HASS-Chart", {
                 options: this.config.chartOptions
             });
             this.wrapper = wrapper;
+            console.log("Chart options", this.config.chartOptions);
             
         } 
         this.updateChartData();

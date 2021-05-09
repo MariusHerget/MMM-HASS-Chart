@@ -177,12 +177,12 @@ module.exports = NodeHelper.create({
                                 data: self.formatHassioDataSetIntoGraphData(config, clonedDataset, aggregateFuncTMP),
                                 chart: JSON.parse(JSON.stringify(chart))
                             };
-                            tmpData.chart.label = tmpData.chart.label + " (" + aggregateFuncTMP + ")";
                             
                             if (aggregateFuncTMP == "mean" ){
                                 tmpData.chart.label = tmpData.chart.label + " (min/mean/max)";
                             }
                             if (aggregateFuncTMP == "min" || aggregateFuncTMP == "max"){
+                                tmpData.chart.label = tmpData.chart.label + " (" + aggregateFuncTMP + ")";
                                 tmpData.chart.borderDash = [5, 15];
                                 tmpData.chart.legend = false
                             }
