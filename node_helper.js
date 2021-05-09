@@ -75,15 +75,25 @@ module.exports = NodeHelper.create({
             entities = entities + (entities == "" ? element.entity : "," + element.entity);
         });
 
-        url = '/api/history/period/' + config.start + "?minimal_response=true&filter_entity_id=" + entities;
-
-        if (config.end_daysInPast) {
+        
+        if (config.start_days) {
             var date = Date.now();
             date.setHours(0, 0, 0, 0);
-            var end = new Date(date - config.end_daysInPast * 24 * 60 * 60 * 1000)
-            url = url + "&end_time=" + encodeURIComponent(end.toISOString());
-        } else if (config.end) {
-            url = url + "&end_time=" + encodeURIComponent(config.end);
+            var start = new Date(date - config.start_days * 24 * 60 * 60 * 1000).toISOString();
+        } else {
+            var start = config.start_timestamp;
+        }
+
+        url = '/api/history/period/' + start  + "?minimal_response=true&filter_entity_id=" + entities;
+
+        if (config.end_days) {
+            var date = Date.now();
+            date.setHours(23, 59, 59, 999);
+            var end = new Date(date - config.end_days * 24 * 60 * 60 * 1000).toISOString();
+            url = url + "&end_time=" + encodeURIComponent(end);
+        }
+        else if (config.end_timestamp) {
+            url = url + "&end_time=" + encodeURIComponent(config.end_timestamp);
         }
 
         if (config.debuglogging) {
