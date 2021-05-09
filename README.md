@@ -6,6 +6,8 @@ This an extension for the [MagicMirror²](https://magicmirror.builders/) with an
 
 The modules adds graphs to your mirror using sensor data from Home Assistant.
 
+<img src="./screen1.png" height="300" width="auto">   <img src="./screen2.png" height="300" width="auto">
+
 # Installation
 
 In your terminal, go to your MagicMirror's Module folder:
@@ -95,6 +97,9 @@ Since there can be multiple data entries in a group, those must be aggregated.
    - Define a custom function to aggreagte the states of a group
    - e.g. `customAggregateFunc: (data) => { return  _.sumBy(data, (item) => item.y)/data.length*2; }`
    - *// TODO: Better example necessary //*
+- **minMeanMax**:
+  - Automaticly generates three lines for min, mean, and max.
+  - Color is defined by `backgroundColor`. If this is not defined it uses `borderColor` with an opacity of `0.2`.
   
 ``` 
 groupBy: "byHour",
@@ -155,6 +160,7 @@ For example:
 ```
 
 # Example Configuration I use with my Home Assistant and MMM
+## Health
 This gives me a simple chart of my weight.
 ```
 {
@@ -165,6 +171,7 @@ This gives me a simple chart of my weight.
         host: "192.168.1.2",
         port: "8123",
         https: true,
+
         start_days: "31",
         end_days: "0",
         groupBy: "byDay",
@@ -207,9 +214,58 @@ This gives me a simple chart of my weight.
 }
 ```
 
-This gives mit his (fake data from Home Assistant):
+This gives mit this (fake data from Home Assistant):
 
 ![](screen1.png)
+
+## Internet speed
+This gives me a simple chart of my internet speed.
+```
+{
+    module: "MMM-HASS-Chart",
+    position: "bottom_right",
+    header: "Inter",
+    config: {
+        host: "192.168.1.2",
+        port: "8123",
+        https: true,
+
+        start_days: "3",
+        end_days: "0",
+        groupBy: "bySixHours",                        
+        aggregateFunc: "minMeanMax",
+
+        chartType: "line",
+        charts: [
+            {
+                entity: "sensor.speedtest_download",
+                label: "Download",
+                borderColor: "rgba(200, 200, 200, 1)",
+                graphTickColor: "rgba(200, 200, 200, 0.8)",
+            }, 
+        ],
+        chartOptions: {
+            responsive: true,
+            interaction: {
+                mode: 'index',
+                intersect: false,
+            },
+            stacked: false,
+            scales: {
+                y: {
+                    type: 'linear',
+                    display: true,
+                    position: 'left',
+                },
+            }
+        },
+    }
+}
+```
+
+This gives mit his (fake data from Home Assistant):
+
+![](screen2.png)
 
 # Dependencies
 - An installation of MagicMirror²
