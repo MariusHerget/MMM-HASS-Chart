@@ -84,7 +84,7 @@ Module.register("MMM-HASS-Chart", {
     getData: function (data) {
         this.sendSocketNotification('GET_HASS_GRAPH_DATA', data);
     },
-    
+
     reloadEntireChart: function (payload) {
         if (this.chartData.datasets)
             this.chartData = {
@@ -102,8 +102,10 @@ Module.register("MMM-HASS-Chart", {
 
         this.updateDom(self.config.fadeSpeed);
     },
+    
     // Getting the graph data from helper (all MMM-HASS-Chart modules get it).
     socketNotificationReceived: function (notification, payload) {
+        var self = this;
         if (notification === "HASS_GRAPH_DATA_RESULT") {
             // Checks if the data is to this instanse of the graph module.
             if (this.identifier === payload.identifier) {
