@@ -247,8 +247,14 @@ Module.register("MMM-HASS-Chart", {
         this.myChart = new Chart(this.ctx, {
             type: this.config.graphStyle,
             data: {
-                labels: ["test 0", "test 1", "test 2"],
-                datasets: [{ x: 0, y: 1 }, { x: 1, y: 2 }, { x: 2, y: 5}],
+                labels: [],
+                datasets: [
+                    {
+                        label: "test a",
+                        data: [{ x: 0, y: 1 }, { x: 1, y: 2 }, { x: 2, y: 5 }],
+                        borderColor: Utils.CHART_COLORS.red,
+                    }
+                ],
             },
             options: options
         });
