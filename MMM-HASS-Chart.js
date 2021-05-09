@@ -121,7 +121,7 @@ Module.register("MMM-HASS-Chart", {
 
     getStyles: function () {
         return [
-            "{{MODULE_NAME}}.css",
+            "MMM-HASS-Chart.css",
         ];
     },
 
@@ -129,13 +129,13 @@ Module.register("MMM-HASS-Chart", {
     getScripts: function () {
         return [
             // Used to create the actual chart.
-            this.file('node_modules/chart.js/dist/Chart.js'),
-            // Used to handle the mouse and touch interactions.
-            this.file('node_modules/hammerjs/hammer.min.js'),
-            // Used for interaction with the graph to be able to zoom and pan.
-            // this.file('node_modules/chartjs-plugin-zoom/chartjs-plugin-zoom.min.js'),
-            // Used for HTTP(s) requests
-            'node_modules/axios/dist/axios.js'
+            // this.file('node_modules/chart.js/dist/Chart.js'),
+            // // Used to handle the mouse and touch interactions.
+            // this.file('node_modules/hammerjs/hammer.min.js'),
+            // // Used for interaction with the graph to be able to zoom and pan.
+            // // this.file('node_modules/chartjs-plugin-zoom/chartjs-plugin-zoom.min.js'),
+            // // Used for HTTP(s) requests
+            // 'node_modules/axios/dist/axios.js'
         ]
     },
 
