@@ -103,7 +103,9 @@ module.exports = NodeHelper.create({
     },
 
     socketNotificationReceived: function (notification, payload) {
+        console.log('MMM-Chart-Hass received ', notification);
         if (notification === 'GET_HASS_GRAPH_DATA') {
+            console.log('MMM-Chart-Hass received and recognized ', notification);
             this.getData(payload);
         }
     },
