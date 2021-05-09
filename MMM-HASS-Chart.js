@@ -171,7 +171,7 @@ Module.register("MMM-HASS-Chart", {
                                             } else {
                                                 // New Data
                                                 console.log("New Data", k, element)
-                                                pds.data.push(element);
+                                                ds.data.push(element);
                                             }
                                         });
                                         if (reloadTable) {
