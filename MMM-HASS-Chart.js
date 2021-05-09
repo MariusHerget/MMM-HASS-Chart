@@ -179,18 +179,18 @@ Module.register("MMM-HASS-Chart", {
     },
 
     // Parsing the data and preparing for the graph chart.
-    // updateChartData: function () {
-    //     if (this.myChart !== 'undefined') {
-    //         // Adding the labels to the chart.
-    //         this.myChart.data.labels = this.chartData.labels;
-    //         // Adding the data to the chart.
-    //         for (var i = 0; i < this.myChart.data.datasets.length && i < this.chartData.datasets.length; i++) {
-    //             this.myChart.data.datasets[i].data = this.chartData.datasets[i].data;
-    //         }
-    //         // Updating the chart.
-    //         this.myChart.update();
-    //     }
-    // },
+    updateChartData: function () {
+        if (this.myChart !== 'undefined') {
+            // Adding the labels to the chart.
+            // this.myChart.data.labels = this.chartData.labels;
+            // // Adding the data to the chart.
+            // for (var i = 0; i < this.myChart.data.datasets.length && i < this.chartData.datasets.length; i++) {
+            //     this.myChart.data.datasets[i].data = this.chartData.datasets[i].data;
+            // }
+            // Updating the chart.
+            this.myChart.update();
+        }
+    },
 
     // // Override dom generator.
     getDom: function () {
@@ -250,9 +250,9 @@ Module.register("MMM-HASS-Chart", {
             },
             options: options
         });
-        Chart.defaults.global.defaultFontSize = this.config.defaultFontSize;
-        Chart.defaults.global.defaultFontFamily = this.config.defaultFontFamily;
-        Chart.defaults.global.defaultFontColor = this.config.defaultFontColor;
+        // Chart.defaults.global.defaultFontSize = this.config.defaultFontSize;
+        // Chart.defaults.global.defaultFontFamily = this.config.defaultFontFamily;
+        // Chart.defaults.global.defaultFontColor = this.config.defaultFontColor;
         this.updateChartData();
         return wrapper;
     }
