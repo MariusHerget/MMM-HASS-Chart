@@ -249,7 +249,11 @@ Module.register("MMM-HASS-Chart", {
                     ticks: {
                         display: false
                     }
-                }]
+                }, {
+                        ticks: {
+                            display: false
+                        }
+                    }]
             }
         };
         // Start of the Scales.
