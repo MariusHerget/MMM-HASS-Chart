@@ -188,14 +188,6 @@ Module.register("MMM-HASS-Chart", {
                         }
                     });
                 } else {
-                    this.myChart = new Chart(this.ctx, {
-                        type: this.config.chartType,
-                        data: {
-                            datasets: [],
-                        },
-                        options: this.config.chartOptions
-                    });
-
                     // Reload entire table
                     self.reloadEntireChart(payload);
                 }
@@ -234,7 +226,7 @@ Module.register("MMM-HASS-Chart", {
             //         });
             // });
             console.log("!! this.myChart.update() !!")
-            this.myChart.update();
+            this.myChart.update('resize');
         }
     },
 
