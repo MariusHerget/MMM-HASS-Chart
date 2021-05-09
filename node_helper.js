@@ -1,6 +1,6 @@
 // TODO add back in after testing
 var NodeHelper = require('node_helper'); 
-// const axios = require('axios').default;
+const axios = require('axios').default;
 const _ = require("lodash");
 const moment = require("moment");
 
