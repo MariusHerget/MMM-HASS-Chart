@@ -103,7 +103,7 @@ module.exports = NodeHelper.create({
     },
 
     socketNotificationReceived: function (notification, payload) {
-        if (notification === 'HASS_GRAPH_DATA_RESULT') {
+        if (notification === 'GET_HASS_GRAPH_DATA') {
             this.getData(payload);
         }
     },
