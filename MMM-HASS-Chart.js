@@ -122,8 +122,8 @@ Module.register("MMM-HASS-Chart", {
                                ) {
                                 // Same starting point
                                 if (
-                                    ds.data[ds.data.length - 1].x == pds.data[-1].x &&
-                                    ds.data[ds.data.length - 1].y == pds.data[-1].y
+                                    ds.data[ds.data.length - 1].x == pds.data[pds.data.length - 1].x &&
+                                    ds.data[ds.data.length - 1].y == pds.data[pds.data.length - 1].y
                                    ) {
                                     // Same end point
                                     // No new data - Do not update!
