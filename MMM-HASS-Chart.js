@@ -163,7 +163,7 @@ Module.register("MMM-HASS-Chart", {
                 console.log("HASS_GRAPH_DATA_RESULT", payload);
 
                 this.chartData = {
-                    datasets=[]
+                    datasets: []
                 };
 
                 payload.formattedData.forEach(element => {
