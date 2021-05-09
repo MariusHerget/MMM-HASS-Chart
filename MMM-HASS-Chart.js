@@ -208,6 +208,7 @@ Module.register("MMM-HASS-Chart", {
 
         var options = {
             type: 'line',
+            responsive: true,
             options: {
                 responsive: true,
                 plugins: {
