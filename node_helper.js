@@ -107,4 +107,4 @@ module.exports = NodeHelper.create({
             this.getData(payload);
         }
     },
-};
+});
