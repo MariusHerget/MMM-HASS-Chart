@@ -24,6 +24,8 @@ Module.register("MMM-HASS-Chart", {
         initialLoadDelay: 1000,
         hassiotoken: false, // True: OAuth bearer token for API is in environment variable HASSIO_TOKEN (useful when running as a hassio add-on)
         updateInterval: 60 * 1000, // every 60 seconds
+        groupBy: "byDay",
+        aggregateFunc: "mean",
 
 		// ------------------------------------------------
         // Chart settings
@@ -53,8 +55,8 @@ Module.register("MMM-HASS-Chart", {
         //xaxisTimeUnit: "millisecond",
         //xaxisTimeUnit: "second",
         //xaxisTimeUnit: "minute",
-        xaxisTimeUnit: "hour",
-        //xaxisTimeUnit: "day",
+        // xaxisTimeUnit: "hour",
+        xaxisTimeUnit: "day",
         //xaxisTimeUnit: "week",
         //xaxisTimeUnit: "month",
         //xaxisTimeUnit: "quarter",
@@ -67,9 +69,9 @@ Module.register("MMM-HASS-Chart", {
         // Example for minute above.
         //xaxisTimeFormatLabels: "mm",
         // Example for hour above.
-        xaxisTimeFormatLabels: "H",
+        // xaxisTimeFormatLabels: "H",
         // Example for day above.
-        //xaxisTimeFormatLabels: "YYYY-MM-DD",
+        xaxisTimeFormatLabels: "DD-MM",
         // Example for week above.
         //xaxisTimeFormatLabels: "WW",
         // Example for month above.
@@ -245,14 +247,14 @@ Module.register("MMM-HASS-Chart", {
                 mode: 'xy',
             },
             scales: {
-                xAxes: [{
-                    scaleLabel: {
-                        display: false
-                    },
-                    ticks: {
-                        display: false // it should work
+                scales: {
+                    x: {
+                        type: 'time',
+                        time: {
+                            unit: 'month'
+                        }
                     }
-                }]
+                }
             }
         };
         // Start of the Scales.

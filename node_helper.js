@@ -1,8 +1,50 @@
 // TODO add back in after testing
 var NodeHelper = require('node_helper'); 
 const axios = require('axios').default;
+const _ = require("lodash");
+const moment = require("moment");
+
+const groups = (() => {
+    const byDay = (item) => moment(item.x).format('DD.MM.YYYY'),
+        byHour = (item) => byDay(item) + ' ' + moment(item.x).format('HH'),
+        bySixHours = (item) => {
+            const m = moment(item.x);
+            const k = (Number(m.format('HH')) - (Number(m.format('HH')%6)))/6;
+            return byDay(item) + ' ' + ['0-5', '6-11', '12-17', '17-23'][k];
+        },
+        byMonth = (item) => moment(item.x).format('MMM YYYY'),
+        byYear = (item) => moment(item.x).format('YYYY'),
+        byWeek = (item) => byYear(item) + ' ' + moment(item.x).format('ww');
+    return {
+        byDay,
+        byHour,
+        bySixHours,
+        byMonth,
+        byWeek,
+        byYear,
+    };
+})();
+
+const aggregates ={
+    mean: (data) => _.meanBy(data, (item) => item.y),
+    max: (data) => _.maxBy(data, (item) => item.y),
+    min: (data) => _.minBy(data, (item) => item.y),
+    sum: (data) => _.sumBy(data, (item) => item.y),
+    median: (data) => { 
+        var array = [];
+        data.forEach((item) => {array.push(item.y)});
+        array.sort((a, b) => b - a); 
+        const length = array.length; 
+        if (length % 2 == 0) { 
+            return (arr[length / 2] + arr[(length / 2) - 1]) / 2; 
+        } else { 
+            return array[Math.floor(length / 2)]; 
+        }    
+    }
+};
 
 module.exports = NodeHelper.create({
+// module.exports = ({
     start: function () {
         console.log('MMM-Chart-Hass helper started...');
     },
@@ -45,15 +87,21 @@ module.exports = NodeHelper.create({
         return url;
     },
 
-    formatHassioDataSetIntoGraphData: function(dataset) {
-        var graphData = [];
-
+    formatHassioDataSetIntoGraphData: function(config, dataset) {
+        var filteredDataset = [];
         dataset.forEach(element => {
             // Use only float values (or filter out 'unknown' / 'unavaiable' / etc)
             if (!isNaN(parseFloat(element.state))) {
-                graphData.push({ x: element["last_changed"], y: parseFloat(element.state) } );
+                filteredDataset.push({ xdate: new Date(element["last_changed"]), x: element["last_changed"], y: parseFloat(element.state) } );
             }
         });
+        
+        var groupedDataset = _.groupBy(filteredDataset, groups[config.groupBy])
+
+        var graphData = [];
+        for ([key, data] of Object.entries(groupedDataset)) {
+            graphData.push({ x: key, y: aggregates[config.aggregateFunc](data) });
+        }
 
         return graphData;
     },
@@ -81,7 +129,7 @@ module.exports = NodeHelper.create({
 
                     formattedData.push({
                         entity: chart.entity,
-                        data: self.formatHassioDataSetIntoGraphData(data),
+                        data: self.formatHassioDataSetIntoGraphData(config, data),
                         chart: chart
                     });
                 });
