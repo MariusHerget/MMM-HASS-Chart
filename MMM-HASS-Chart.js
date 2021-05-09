@@ -129,7 +129,7 @@ Module.register("MMM-HASS-Chart", {
     getScripts: function () {
         return [
             // Used to create the actual chart.
-            this.file('node_modules/chart.js/dist/chart.js'),
+            this.file('node_modules/chart.js/dist/chart.min.js'),
             // // Used to handle the mouse and touch interactions.
             this.file('node_modules/hammerjs/hammer.min.js'),
             // // Used for interaction with the graph to be able to zoom and pan.
@@ -204,9 +204,6 @@ Module.register("MMM-HASS-Chart", {
         wrapper.appendChild(this.ctx);
 
         // Setting the defaults.
-        Chart.defaults.global.defaultFontSize = this.config.defaultFontSize;
-        Chart.defaults.global.defaultFontFamily = this.config.defaultFontFamily;
-        Chart.defaults.global.defaultFontColor = this.config.defaultFontColor;
 
         var options = {
             type: 'line',
@@ -253,6 +250,9 @@ Module.register("MMM-HASS-Chart", {
             },
             options: options
         });
+        Chart.defaults.global.defaultFontSize = this.config.defaultFontSize;
+        Chart.defaults.global.defaultFontFamily = this.config.defaultFontFamily;
+        Chart.defaults.global.defaultFontColor = this.config.defaultFontColor;
         this.updateChartData();
         return wrapper;
     }
