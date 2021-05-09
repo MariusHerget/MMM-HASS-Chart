@@ -243,7 +243,12 @@ Module.register("MMM-HASS-Chart", {
             zoom: {
                 enabled: true,
                 mode: 'xy',
-            },
+            }, 
+            scales: {
+                xAxes: [{
+                    display: false //this will remove all the x-axis grid lines
+                }]
+            }
         };
         // Start of the Scales.
         var optionScales = {
