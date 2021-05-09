@@ -173,13 +173,18 @@ module.exports = NodeHelper.create({
                             // Clone dataset to use multiple times
                             let clonedDataset = JSON.parse(JSON.stringify(data));
                             var tmpData = {
-                                entity: chart.entity + "." + aggregateFuncTMP,
+                                entity: chart.entity,
                                 data: self.formatHassioDataSetIntoGraphData(config, clonedDataset, aggregateFuncTMP),
                                 chart: JSON.parse(JSON.stringify(chart))
                             };
                             tmpData.chart.label = tmpData.chart.label + " (" + aggregateFuncTMP + ")";
+                            
+                            if (aggregateFuncTMP == "mean" ){
+                                tmpData.chart.label = tmpData.chart.label + " (min/mean/max)";
+                            }
                             if (aggregateFuncTMP == "min" || aggregateFuncTMP == "max"){
                                 tmpData.chart.borderDash = [5, 15];
+                                tmpData.chart.legend = false
                             }
                             if (aggregateFuncTMP == "max") {
                                 tmpData.chart.fill = "-2";
