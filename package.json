@@ -27,6 +27,8 @@
   "dependencies": {
     "axios": "latest",
     "chart.js": "latest",
+    "hammerjs": "latest",
+    "chartjs-plugin-zoom": "latest",
     "lodash": "^4.17.21",
     "moment": "^2.29.1"
   }
