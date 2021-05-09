@@ -133,6 +133,12 @@ module.exports = NodeHelper.create({
         return graphData;
     },
 
+    setColorOpacity: function(color, opacity) {
+        return color.map(function (a) {
+            return a.replace(/rgba?(\(\s*\d+\s*,\s*\d+\s*,\s*\d+)(?:\s*,.+?)?\)/, 'rgba$1,'+opacity+')');
+        });
+    },
+
     getData: function (config) {
         var self = this;
         const hassio = axios.create({
@@ -175,6 +181,12 @@ module.exports = NodeHelper.create({
                             }
                             if (aggregateFuncTMP == "max") {
                                 tmpData.chart.fill = "-2";
+                                tmpData.chart.backgroundColor = 
+                                    tmpData.chart.backgroundColor ? 
+                                          tmpData.chart.backgroundColor 
+                                        : (tmpData.chart.borderColor ?
+                                              self(setColorOpacitytmpData.chart.borderColor, "0.2")
+                                            : 'rgba(255,255,255,0.2)');
                             }
                             formattedData.push(tmpData);
                         });
