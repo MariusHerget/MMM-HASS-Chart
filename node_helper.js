@@ -161,8 +161,8 @@ module.exports = NodeHelper.create({
                             if (dataset[0]["entity_id"] == chart.entity)
                                 data = JSON.parse(JSON.stringify(dataset));
                     });
-
-                    if (config.aggregateFunc != "minMeanMax") {
+                    let selectedaggregateFunc = config.charts.aggregateFunc ? config.charts.aggregateFunc : config.aggregateFunc;
+                    if (selectedaggregateFunc != "minMeanMax") {
                         formattedData.push({
                             entity: chart.entity,
                             data: self.formatHassioDataSetIntoGraphData(config, data),
