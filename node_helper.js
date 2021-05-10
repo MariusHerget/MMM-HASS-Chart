@@ -1,5 +1,5 @@
 // TODO add back in after testing
-var NodeHelper = require('node_helper'); 
+// var NodeHelper = require('node_helper'); 
 const axios = require('axios').default;
 const _ = require("lodash");
 const moment = require("moment");
@@ -47,8 +47,8 @@ const aggregates ={
     }
 };
 
-module.exports = NodeHelper.create({
-// module.exports = ({
+// module.exports = NodeHelper.create({
+module.exports = ({
     start: function () {
         console.log('MMM-Chart-Hass helper started...');
     },
@@ -75,8 +75,13 @@ module.exports = NodeHelper.create({
 
     buildRequestHassUrl: function (config) {
         var entities = "";
+        var minimal = "minimal_response=true&";
         config.charts.forEach(element => {
             entities = entities + (entities == "" ? element.entity : "," + element.entity);
+            if (element.attribute) {
+                // We need to request the attributes for all entities
+                minimal = "";
+            }
         });
 
         
@@ -87,7 +92,7 @@ module.exports = NodeHelper.create({
             var start = config.start_timestamp;
         }
 
-        url = '/api/history/period/' + start  + "?minimal_response=true&filter_entity_id=" + entities;
+        url = '/api/history/period/' + start  + "?filter_entity_id=" + entities;
 
         if (config.end_days) {
             var dat = new Date(Date.now()).setHours(23, 59, 59, 999);
@@ -104,12 +109,14 @@ module.exports = NodeHelper.create({
         return url;
     },
 
-    formatHassioDataSetIntoGraphData: function (config, dataset, aggregateFuncTMP = "mean") {
+    formatHassioDataSetIntoGraphData: function (config, dataset, i, aggregateFuncTMP = "mean") {
         var filteredDataset = [];
         dataset.forEach(element => {
             // Use only float values (or filter out 'unknown' / 'unavaiable' / etc)
-            if (!isNaN(parseFloat(element.state))) {
-                filteredDataset.push({ xdate: new Date(element["last_changed"]), x: element["last_changed"], y: parseFloat(element.state) } );
+            let y = config.charts[i].attribute ? element.attributes[config.charts[i].attribute] : element.state;
+            console.log(element.attributes[config.charts[i].attribute])
+            if (!isNaN(parseFloat(y))) {
+                filteredDataset.push({ xdate: new Date(element["last_changed"]), x: element["last_changed"], y: parseFloat(y) } );
             }
         });
         
@@ -165,7 +172,7 @@ module.exports = NodeHelper.create({
                     if (selectedaggregateFunc != "minMeanMax") {
                         formattedData.push({
                             entity: chart.entity,
-                            data: self.formatHassioDataSetIntoGraphData(config, data),
+                            data: self.formatHassioDataSetIntoGraphData(config, data, i),
                             chart: chart
                         });
                     } else {
@@ -174,7 +181,7 @@ module.exports = NodeHelper.create({
                             let clonedDataset = JSON.parse(JSON.stringify(data));
                             var tmpData = {
                                 entity: chart.entity,
-                                data: self.formatHassioDataSetIntoGraphData(config, clonedDataset, aggregateFuncTMP),
+                                data: self.formatHassioDataSetIntoGraphData(config, clonedDataset, i, aggregateFuncTMP),
                                 chart: JSON.parse(JSON.stringify(chart))
                             };
                             
@@ -205,7 +212,7 @@ module.exports = NodeHelper.create({
                     formattedData: formattedData
                 }
 
-                self.sendSocketNotification('HASS_GRAPH_DATA_RESULT', payload);
+                // self.sendSocketNotification('HASS_GRAPH_DATA_RESULT', payload);
             })
             .catch(function (error) {
                 // handle error
