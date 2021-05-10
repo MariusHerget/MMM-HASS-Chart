@@ -8,6 +8,9 @@
  *****************************************************/
 .MMM-HASS-Chart {
 	width: 500px;
-	height: 220px;
 	background-color: #000000;
+}
+
+.MMM-chart-middle {
+	height: 150px;
 }
