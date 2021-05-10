@@ -1,5 +1,5 @@
 // TODO add back in after testing
-// var NodeHelper = require('node_helper'); 
+var NodeHelper = require('node_helper'); 
 const axios = require('axios').default;
 const _ = require("lodash");
 const moment = require("moment");
@@ -47,8 +47,8 @@ const aggregates ={
     }
 };
 
-// module.exports = NodeHelper.create({
-module.exports = ({
+module.exports = NodeHelper.create({
+// module.exports = ({
     start: function () {
         console.log('MMM-Chart-Hass helper started...');
     },
@@ -92,7 +92,7 @@ module.exports = ({
             var start = config.start_timestamp;
         }
 
-        url = '/api/history/period/' + start  + "?filter_entity_id=" + entities;
+        url = '/api/history/period/' + start + "?significant_changes_only&" + minimal + "filter_entity_id=" + entities;
 
         if (config.end_days) {
             var dat = new Date(Date.now()).setHours(23, 59, 59, 999);
@@ -114,7 +114,6 @@ module.exports = ({
         dataset.forEach(element => {
             // Use only float values (or filter out 'unknown' / 'unavaiable' / etc)
             let y = config.charts[i].attribute ? element.attributes[config.charts[i].attribute] : element.state;
-            console.log(element.attributes[config.charts[i].attribute])
             if (!isNaN(parseFloat(y))) {
                 filteredDataset.push({ xdate: new Date(element["last_changed"]), x: element["last_changed"], y: parseFloat(y) } );
             }
@@ -159,7 +158,6 @@ module.exports = ({
         hassio.get(self.buildRequestHassUrl(config))
             .then(function (response) {
                 var formattedData = [];
-                
                 config.charts.forEach((chart, i) => {
                     // Look for corresponding dataset in response
                     let data = [];
@@ -212,7 +210,7 @@ module.exports = ({
                     formattedData: formattedData
                 }
 
-                // self.sendSocketNotification('HASS_GRAPH_DATA_RESULT', payload);
+                self.sendSocketNotification('HASS_GRAPH_DATA_RESULT', payload);
             })
             .catch(function (error) {
                 // handle error
