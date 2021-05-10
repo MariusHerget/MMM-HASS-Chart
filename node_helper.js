@@ -75,8 +75,13 @@ module.exports = NodeHelper.create({
 
     buildRequestHassUrl: function (config) {
         var entities = "";
+        var minimal = "minimal_response=true&";
         config.charts.forEach(element => {
             entities = entities + (entities == "" ? element.entity : "," + element.entity);
+            if (element.attribute) {
+                // We need to request the attributes for all entities
+                minimal = "";
+            }
         });
 
         
@@ -87,7 +92,7 @@ module.exports = NodeHelper.create({
             var start = config.start_timestamp;
         }
 
-        url = '/api/history/period/' + start  + "?minimal_response=true&filter_entity_id=" + entities;
+        url = '/api/history/period/' + start + "?significant_changes_only&" + minimal + "filter_entity_id=" + entities;
 
         if (config.end_days) {
             var dat = new Date(Date.now()).setHours(23, 59, 59, 999);
@@ -104,12 +109,13 @@ module.exports = NodeHelper.create({
         return url;
     },
 
-    formatHassioDataSetIntoGraphData: function (config, dataset, aggregateFuncTMP = "mean") {
+    formatHassioDataSetIntoGraphData: function (config, dataset, i, aggregateFuncTMP = "mean") {
         var filteredDataset = [];
         dataset.forEach(element => {
             // Use only float values (or filter out 'unknown' / 'unavaiable' / etc)
-            if (!isNaN(parseFloat(element.state))) {
-                filteredDataset.push({ xdate: new Date(element["last_changed"]), x: element["last_changed"], y: parseFloat(element.state) } );
+            let y = config.charts[i].attribute ? element.attributes[config.charts[i].attribute] : element.state;
+            if (!isNaN(parseFloat(y))) {
+                filteredDataset.push({ xdate: new Date(element["last_changed"]), x: element["last_changed"], y: parseFloat(y) } );
             }
         });
         
@@ -152,7 +158,6 @@ module.exports = NodeHelper.create({
         hassio.get(self.buildRequestHassUrl(config))
             .then(function (response) {
                 var formattedData = [];
-                
                 config.charts.forEach((chart, i) => {
                     // Look for corresponding dataset in response
                     let data = [];
@@ -161,11 +166,11 @@ module.exports = NodeHelper.create({
                             if (dataset[0]["entity_id"] == chart.entity)
                                 data = JSON.parse(JSON.stringify(dataset));
                     });
-
-                    if (config.aggregateFunc != "minMeanMax") {
+                    let selectedaggregateFunc = config.charts.aggregateFunc ? config.charts.aggregateFunc : config.aggregateFunc;
+                    if (selectedaggregateFunc != "minMeanMax") {
                         formattedData.push({
                             entity: chart.entity,
-                            data: self.formatHassioDataSetIntoGraphData(config, data),
+                            data: self.formatHassioDataSetIntoGraphData(config, data, i),
                             chart: chart
                         });
                     } else {
@@ -173,13 +178,18 @@ module.exports = NodeHelper.create({
                             // Clone dataset to use multiple times
                             let clonedDataset = JSON.parse(JSON.stringify(data));
                             var tmpData = {
-                                entity: chart.entity + "." + aggregateFuncTMP,
-                                data: self.formatHassioDataSetIntoGraphData(config, clonedDataset, aggregateFuncTMP),
+                                entity: chart.entity,
+                                data: self.formatHassioDataSetIntoGraphData(config, clonedDataset, i, aggregateFuncTMP),
                                 chart: JSON.parse(JSON.stringify(chart))
                             };
-                            tmpData.chart.label = tmpData.chart.label + " (" + aggregateFuncTMP + ")";
+                            
+                            if (aggregateFuncTMP == "mean" ){
+                                tmpData.chart.label = tmpData.chart.label + " (min/mean/max)";
+                            }
                             if (aggregateFuncTMP == "min" || aggregateFuncTMP == "max"){
+                                tmpData.chart.label = tmpData.chart.label + " (" + aggregateFuncTMP + ")";
                                 tmpData.chart.borderDash = [5, 15];
+                                tmpData.chart.legend = false
                             }
                             if (aggregateFuncTMP == "max") {
                                 tmpData.chart.fill = "-2";

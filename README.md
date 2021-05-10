@@ -139,11 +139,15 @@ chartOptions: {
 Each Home Assistant sensor is displayed as a single line within the graph. In `charts` you can define those. 
 
 - `entity`: is the Sensors *entity_id* from Home Assistant.
+- `aggregateFunc`: optional aggregation function for this line
+- `attribute`: Do not use the state value, instead use an attribute of the sensor
 - All other options are used to describe the resulting line for the sensor. It supports all ChartJS line options (see [ChartJS line documentation](https://www.chartjs.org/docs/latest/charts/line.html#line-styling)).
 ``` 
 charts: [
     {
         entity: "sensor.name",
+        aggregateFunc: "mean",
+        attribute: "name",
         // ChartJs line options 
     }
 ]

@@ -1,6 +1,6 @@
 {
   "name": "MMM-HASS-Chart",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "This module for the Magic Mirror 2 for rendering graphs from Home Assistant sensors.",
   "repository": {
     "type": "git",
