@@ -39,7 +39,7 @@ Module.register("MMM-HASS-Chart", {
                 display: true,
                 position: "top",
                 labels: {
-                    boxWidth: 2,
+                    boxWidth: 1,
                     fontColor: "rgba(153, 153, 153, 0.6)"
                 }
             },
